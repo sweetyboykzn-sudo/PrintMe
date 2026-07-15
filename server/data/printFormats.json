@@ -1,0 +1,42 @@
+[
+  {
+    "id": "a5",
+    "name": "А5",
+    "widthCm": 14.8,
+    "heightCm": 21,
+    "price": 500,
+    "enabled": true,
+    "sort": 1,
+    "y": 0.15
+  },
+  {
+    "id": "a4",
+    "name": "А4",
+    "widthCm": 20,
+    "heightCm": 30,
+    "price": 700,
+    "enabled": true,
+    "sort": 2,
+    "y": 0.4
+  },
+  {
+    "id": "a3",
+    "name": "А3",
+    "widthCm": 24,
+    "heightCm": 35,
+    "price": 850,
+    "enabled": true,
+    "sort": 3,
+    "y": 0.4
+  },
+  {
+    "id": "a3plus",
+    "name": "А3+",
+    "widthCm": 28,
+    "heightCm": 40,
+    "price": 1000,
+    "enabled": true,
+    "sort": 4,
+    "y": 0.3
+  }
+]

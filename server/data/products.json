@@ -1,0 +1,93 @@
+{
+  "bases": [
+    {
+      "id": "0baa86dd",
+      "name": "Футболка оверсайз",
+      "description": "",
+      "type": "oversize",
+      "basePrice": 990,
+      "printPrice": 500,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "active": true,
+      "colors": [
+        {
+          "id": "b8cbe7",
+          "name": "Чёрный",
+          "hex": "#000000",
+          "mockupFront": "/uploads/1783940933873-e15ebc16-fbdd-42c3-9d7d-f26b903d9719.png",
+          "mockupBack": "/uploads/1783940931519-0f432b11-6e52-4b66-b34a-86c126f5a31e.png",
+          "printArea": {
+            "x": 0.28,
+            "y": 0.22,
+            "w": 0.44,
+            "h": 0.42
+          }
+        },
+        {
+          "id": "bb825e",
+          "name": "Белый",
+          "hex": "#ffffff",
+          "mockupFront": "/uploads/1783940866014-bacaa4d3-16da-4014-96f6-585e1ffe544c.png",
+          "mockupBack": "/uploads/1783940868240-a5d1ab65-dca7-43f2-9aea-8b414aeff9ce.png",
+          "printArea": {
+            "x": 0.28,
+            "y": 0.22,
+            "w": 0.44,
+            "h": 0.42
+          }
+        }
+      ]
+    },
+    {
+      "id": "2258c610",
+      "name": "Футболка Basic",
+      "description": "",
+      "type": "basic",
+      "basePrice": 990,
+      "printPrice": 500,
+      "sizes": [
+        "44",
+        "46",
+        "48",
+        "50",
+        "52",
+        "54",
+        "56"
+      ],
+      "active": true,
+      "colors": [
+        {
+          "id": "2b1027",
+          "name": "Белый",
+          "hex": "#ffffff",
+          "mockupFront": "/uploads/1783941037510-6c1cff44-ed30-4151-a975-7d40fb30d3ee.jpg",
+          "mockupBack": null,
+          "printArea": {
+            "x": 0.28,
+            "y": 0.22,
+            "w": 0.44,
+            "h": 0.42
+          }
+        },
+        {
+          "id": "19b2c8",
+          "name": "Чёрный",
+          "hex": "#000000",
+          "mockupFront": "/uploads/1783941041235-2c44cb12-b0ac-49b2-a2e8-e5d165058e3f.jpg",
+          "mockupBack": null,
+          "printArea": {
+            "x": 0.28,
+            "y": 0.22,
+            "w": 0.44,
+            "h": 0.42
+          }
+        }
+      ]
+    }
+  ]
+}

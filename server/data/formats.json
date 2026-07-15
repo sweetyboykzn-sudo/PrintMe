@@ -1,0 +1,34 @@
+[
+  {
+    "id": "a5",
+    "name": "А5",
+    "widthCm": 14.8,
+    "heightCm": 21,
+    "price": 300,
+    "active": true
+  },
+  {
+    "id": "a4",
+    "name": "А4",
+    "widthCm": 21,
+    "heightCm": 29.7,
+    "price": 500,
+    "active": true
+  },
+  {
+    "id": "a3",
+    "name": "А3",
+    "widthCm": 29.7,
+    "heightCm": 42,
+    "price": 800,
+    "active": true
+  },
+  {
+    "id": "a3plus",
+    "name": "А3+",
+    "widthCm": 32,
+    "heightCm": 45,
+    "price": 1000,
+    "active": true
+  }
+]
