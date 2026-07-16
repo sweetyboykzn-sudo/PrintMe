@@ -35,7 +35,8 @@ app.use('/api/admin', adminRoutes);
 
 const clientDist = path.join(__dirname, '..', 'client', 'dist');
 app.use(express.static(clientDist));
-app.get('*', (req, res, next) => {
+app.get('/*', (req, res, next) => {
+  if (req.method !== 'GET') return next();
   if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) return next();
   res.sendFile(path.join(clientDist, 'index.html'), (err) => {
     if (err) next();
