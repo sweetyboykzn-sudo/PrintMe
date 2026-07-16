@@ -1,3 +1,4 @@
+import React from 'react';
 export default function Login({ onLogin }) {
   return (
     <div className="min-h-[70vh] grid place-items-center px-4">

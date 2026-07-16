@@ -1,3 +1,5 @@
+const API_URL = import.meta.env.VITE_API_URL; // Добавляем такую строку!
+
 const adminPass = () => localStorage.getItem('adminPassword') || '';
 
 export async function api(path, options = {}) {
@@ -7,7 +9,12 @@ export async function api(path, options = {}) {
   }
   if (options.admin) headers['x-admin-password'] = adminPass();
 
-  const res = await fetch(path, {
+  // Если path начинается с '/', добавляем API_URL впереди:
+  const url = path.startsWith('/')
+    ? `${API_URL}${path}`
+    : path;
+
+  const res = await fetch(url, {
     ...options,
     headers,
     body:

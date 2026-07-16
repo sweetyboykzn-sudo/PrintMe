@@ -1,3 +1,4 @@
+import React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from '../api';
 import TshirtCanvas, { DEFAULT_PRINT_FORMATS } from './TshirtCanvas';

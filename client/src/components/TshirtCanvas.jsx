@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { fabric } from 'fabric';
 
@@ -86,6 +87,25 @@ const centerHGuide = useRef(null);
   const [textSelected, setTextSelected] = useState(false);
   const [textOpen, setTextOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+
+const [printWidthCm, setPrintWidthCm] = useState(15);
+const [price, setPrice] = useState(0);
+// Ниже в компоненте ranges - массив с диапазонами и ценой
+const ranges = [
+  { from: 10, to: 15, price: 500 },
+  { from: 15.1, to: 20, price: 700 },
+  { from: 20.1, to: 30, price: 850 }
+];
+function getPrice(width, ranges) {
+  for (const r of ranges) {
+    if (width >= r.from && width <= r.to) return r.price;
+  }
+  return 0;
+}
+useEffect(() => {
+  setPrice(getPrice(printWidthCm, ranges));
+}, [printWidthCm]);
+
 
   const [localFormat, setLocalFormat] = useState(() => {
     if (selectedFormat) return selectedFormat;
@@ -457,36 +477,7 @@ canvas.on('object:scaling', function(e) {
       canvas.setActiveObject(guide);
     };
 
-    const drawFormatGuide = () => {
-      if (formatGuideRef.current) {
-        canvas.remove(formatGuideRef.current);
-        formatGuideRef.current = null;
-      }
-      if (mode !== 'client' || !activeFormat) return;
-
-      const a = calcFormatArea(activeFormat);
-      formatAreaRef.current = a;
-
-      const guide = new fabric.Rect({
-        left: a.left,
-        top: a.top,
-        width: a.width,
-        height: a.height,
-        fill: 'rgba(16,185,129,0.10)',
-        stroke: 'rgba(5,150,105,0.95)',
-        strokeWidth: 2,
-        strokeDashArray: [6, 4],
-        selectable: true,
-        evented: true,
-        excludeFromExport: true,
-        name: 'format-guide'
-      });
-
-      canvas.add(guide);
-      formatGuideRef.current = guide;
-      canvas.bringToFront(guide);
-      refreshDesignClips();
-    };
+    const drawFormatGuide = () => {};
 
     const readRect = (obj) => {
       obj.setCoords();
@@ -817,53 +808,33 @@ canvas.on('selection:cleared', hideCenterGuides);
       const box = formatAreaRef.current;
 
       fabric.Image.fromURL(dataUrl, (img) => {
-        if (!isAlive() || !img) {
-          setBusy(false);
-          return;
-        }
+  setBusy(false);
+  if (!isAlive() || !img) return;
 
-        let left;
-        let top;
-        let targetW;
-        let targetH;
+  // --- Новый расчет масштаба ---
+  const cmWidth = printWidthCm; // текущая ширина
+const pxPerCm = maxAreaRef.current.width / 32; 
+const targetWidthPx = cmWidth * pxPerCm;
+const scale = targetWidthPx / (img.width || 1);
+img.scale(scale);
+  // --- конец куска ---
 
-        if (slot) {
-          left = slot.left;
-          top = slot.top;
-          targetW = slot.getScaledWidth();
-          targetH = slot.getScaledHeight();
-          canvas.remove(slot);
-        } else {
-          left = box.left + box.width / 2;
-          top = box.top + box.height / 2;
-          targetW = box.width * 0.9;
-          targetH = box.height * 0.38;
-        }
+  img.set({
+    left: maxAreaRef.current.left + maxAreaRef.current.width / 2,
+    top: maxAreaRef.current.top + maxAreaRef.current.height / 2,
+    originX: 'center',
+    originY: 'center',
+    ...commonControls,
+    clipPath: makeClip(maxAreaRef.current),
+    name: 'design'
+  });
 
-        const scale = Math.min(
-          targetW / (img.width || 1),
-          targetH / (img.height || 1)
-        );
-        img.scale(scale);
-        img.set({
-          left,
-          top,
-          originX: 'center',
-          originY: 'center',
-          ...commonControls,
-          clipPath: makeClip(box),
-          name: 'tpl-image',
-          role: 'image',
-          placeholderColor: '#d1d5db'
-        });
-        canvas.add(img);
-        canvas.setActiveObject(img);
-        constrainObjectToFormat(img);
-        setTextSelected(false);
-        if (formatGuideRef.current) canvas.bringToFront(formatGuideRef.current);
-        setBusy(false);
-        safeRender();
-      });
+  canvas.add(img);
+  canvas.setActiveObject(img);
+  setTextSelected(false);
+  if (formatGuideRef.current) canvas.bringToFront(formatGuideRef.current);
+  safeRender();
+});
     };
 
     const publishApi = () => {
@@ -898,34 +869,34 @@ canvas.on('selection:cleared', hideCenterGuides);
               return;
             }
 
-            fabric.Image.fromURL(dataUrl, (img) => {
-              setBusy(false);
-              if (!isAlive() || !img) return;
+           fabric.Image.fromURL(dataUrl, (img) => {
+  setBusy(false);
+  if (!isAlive() || !img) return;
 
-              const box = formatAreaRef.current;
-              const scale = Math.min(
-                (box.width * 0.9) / (img.width || 1),
-                (box.height * 0.9) / (img.height || 1),
-                1
-              );
+  // --- Новый расчет масштаба ---
+  const cmWidth = printWidthCm; // текущая ширина из state
+  const pxPerCm = maxAreaRef.current.width / 32; // если 32см — реальная ширина области
+  const targetWidthPx = cmWidth * pxPerCm;
+  const scale = targetWidthPx / (img.width || 1);
+  img.scale(scale);
+  // --- конец куска ---
 
-              img.scale(scale);
-              img.set({
-                left: box.left + box.width / 2,
-                top: box.top + box.height / 2,
-                originX: 'center',
-                originY: 'center',
-                ...commonControls,
-                clipPath: makeClip(box),
-                name: 'design'
-              });
+  img.set({
+    left: maxAreaRef.current.left + maxAreaRef.current.width / 2,
+    top: maxAreaRef.current.top + maxAreaRef.current.height / 2,
+    originX: 'center',
+    originY: 'center',
+    ...commonControls,
+    clipPath: makeClip(maxAreaRef.current),
+    name: 'design'
+  });
 
-              canvas.add(img);
-              canvas.setActiveObject(img);
-              setTextSelected(false);
-              if (formatGuideRef.current) canvas.bringToFront(formatGuideRef.current);
-              safeRender();
-            });
+  canvas.add(img);
+  canvas.setActiveObject(img);
+  setTextSelected(false);
+  if (formatGuideRef.current) canvas.bringToFront(formatGuideRef.current);
+  safeRender();
+});
           };
           reader.onerror = () => setBusy(false);
           reader.readAsDataURL(file);
@@ -1484,6 +1455,22 @@ canvas.on('selection:cleared', hideCenterGuides);
         className="mx-auto rounded-2xl shadow-md border border-slate-200 overflow-hidden bg-slate-200 ring-1 ring-black/5"
         style={{ width: size.w, height: size.h }}
       >
+	  <div className="py-2 px-2">
+  <label className="block text-sm mb-1">
+    Выберите ширину принта (см):
+    <input
+      type="range"
+      min={10}
+      max={30}
+      step={0.1}
+      value={printWidthCm}
+      onChange={e => setPrintWidthCm(+e.target.value)}
+      className="w-full mt-1"
+    />
+    <span className="text-emerald-700 font-bold ml-2">{printWidthCm.toFixed(1)} см</span>
+  </label>
+  <div className="mt-1 font-semibold text-lg">Стоимость: <span className="text-blue-700">{price} руб.</span></div>
+</div>
         <canvas ref={canvasElRef} />
       </div>
     </div>

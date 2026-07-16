@@ -1,3 +1,4 @@
+import React from 'react';
 const FONTS = [
   { id: 'Arial', label: 'Arial' },
   { id: 'Georgia', label: 'Georgia' },

@@ -2,6 +2,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import Constructor from './pages/Constructor';
 import Admin from './pages/Admin';
 import PaymentResult from './pages/PaymentResult';
+import React from 'react';
 export default function App() {
   return (
     <div className="min-h-screen">

@@ -1,3 +1,4 @@
+import React from 'react';
 export default function OrderForm({ total, loading, onSubmit }) {
   return (
     <form
